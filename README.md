@@ -1,9 +1,9 @@
-<div style="display:flex;">  
-  <h1> Pokecenter </h1>
+<div style="display: flex; align-items: center;">  
   <a href="https://github.com/Hugosan000/Pokecenter">
-    <img src="https://cdn.icon-icons.com/icons2/851/PNG/512/pokemon_pokecenter_icon-icons.com_67517.png" aligh="center" height="80"
+    <img style="margin-right: 10px;" src="https://cdn.icon-icons.com/icons2/851/PNG/512/pokemon_pokecenter_icon-icons.com_67517.png" aligh="center" height="80"
     width="80">    
   </a>
+  <h1> Pokecenter </h1>
 </div>                  
  
 
@@ -20,3 +20,8 @@
 * CI/CD action GitgHub - pipeline
 * Swagger - Documentation
 * Cypress - Frontend test / component test
+
+## UML DATABASE
+![image](https://github.com/Hugosan000/Pokecenter/assets/61331185/cd574e1c-590a-4458-b08c-abdf255cbf65)
+
+## FLUXOGRAM
