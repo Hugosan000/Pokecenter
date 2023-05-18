@@ -20,3 +20,8 @@
 * CI/CD action GitgHub - pipeline
 * Swagger - Documentation
 * Cypress - Frontend test / component test
+
+## UML DATABASE
+![image](https://github.com/Hugosan000/Pokecenter/assets/61331185/cd574e1c-590a-4458-b08c-abdf255cbf65)
+
+## FLUXOGRAM
