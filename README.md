@@ -1,9 +1,9 @@
-<div style="display:flex;">  
-  <h1> Pokecenter </h1>
+<div style="display: flex; align-items: center;">  
   <a href="https://github.com/Hugosan000/Pokecenter">
-    <img src="https://cdn.icon-icons.com/icons2/851/PNG/512/pokemon_pokecenter_icon-icons.com_67517.png" aligh="center" height="80"
+    <img style="margin-right: 10px;" src="https://cdn.icon-icons.com/icons2/851/PNG/512/pokemon_pokecenter_icon-icons.com_67517.png" aligh="center" height="80"
     width="80">    
   </a>
+  <h1> Pokecenter </h1>
 </div>                  
  
 
