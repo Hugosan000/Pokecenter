@@ -14,7 +14,6 @@
 ### Stack: 
 * MySQL 
 * Springboot
-* Vue
 * Junit - Unit testing
 * Selenium/Robot framework Python - Lib HTTPRequest
 * CI/CD action GitgHub - pipeline
@@ -22,6 +21,4 @@
 * Cypress - Frontend test / component test
 
 ## UML DATABASE
-![image](https://github.com/Hugosan000/Pokecenter/assets/61331185/cd574e1c-590a-4458-b08c-abdf255cbf65)
-
-## FLUXOGRAM
+![image](https://github.com/Hugosan000/Pokecenter/assets/52075166/2e9c04d0-5ce0-475f-b0fa-4a07be2de29a)
