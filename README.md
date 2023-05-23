@@ -21,4 +21,4 @@
 * Cypress - Frontend test / component test
 
 ## UML DATABASE
-![image](https://github.com/Hugosan000/Pokecenter/assets/52075166/2e9c04d0-5ce0-475f-b0fa-4a07be2de29a)
+![image](https://github.com/Hugosan000/Pokecenter/assets/52075166/f4ff17f0-a228-4efb-9762-006f26695559)
