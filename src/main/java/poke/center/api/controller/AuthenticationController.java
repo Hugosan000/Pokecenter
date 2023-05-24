@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import poke.center.api.domain.user.AuthenticationData;
+import poke.center.api.domain.user.User;
+import poke.center.api.infra.secutiry.JwtTokenData;
+import poke.center.api.infra.secutiry.TokenService;
 
 @RestController
 @RequestMapping("/login")
@@ -19,12 +22,17 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping()
     public ResponseEntity login(@RequestBody @Valid AuthenticationData data) {
-        var token = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        var authentication = manager.authenticate(token);
+        var authenticationToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        var authentication = manager.authenticate(authenticationToken);
 
-        return ResponseEntity.ok().build();
+        var jwtToken = tokenService.createToken((User) authentication.getPrincipal());
+
+        return ResponseEntity.ok(new JwtTokenData(jwtToken));
 
     }
 
