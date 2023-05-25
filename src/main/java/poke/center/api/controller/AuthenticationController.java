@@ -6,14 +6,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import poke.center.api.domain.user.AuthenticationData;
 import poke.center.api.domain.user.User;
 import poke.center.api.infra.secutiry.JwtTokenData;
 import poke.center.api.infra.secutiry.TokenService;
 
 @RestController
-//@RequestMapping("/login")
+@RequestMapping("/login")
 public class AuthenticationController {
 
     @Autowired
@@ -22,7 +25,7 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping("login")
+    @PostMapping()
     public ResponseEntity login(@RequestBody @Valid AuthenticationData data) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var authentication = manager.authenticate(authenticationToken);
@@ -31,11 +34,6 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new JwtTokenData(jwtToken));
 
-    }
-
-    @GetMapping("test")
-    public String test() {
-        return "Salve";
     }
 
 
