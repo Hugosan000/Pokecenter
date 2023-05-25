@@ -31,7 +31,7 @@ public class RegisterController {
         var user = userRepository.findByLogin(data.login());
 
         if (user != null) {
-            return ResponseEntity.badRequest().body("Username not available");
+            return ResponseEntity.unprocessableEntity().body("Username not available");
         }
 
 
