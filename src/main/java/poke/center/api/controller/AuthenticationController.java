@@ -22,7 +22,7 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping("trainer/login")
+    @PostMapping("login")
     public ResponseEntity trainerLogin(@RequestBody @Valid AuthenticationData data) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var authentication = manager.authenticate(authenticationToken);
