@@ -1,4 +1,4 @@
-package poke.center.api.controller;
+package poke.center.api.domain.trainer;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

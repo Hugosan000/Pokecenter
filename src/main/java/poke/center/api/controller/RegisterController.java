@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import poke.center.api.domain.role.Role;
 import poke.center.api.domain.role.RoleRepository;
+import poke.center.api.domain.trainer.TrainerRegisterData;
 import poke.center.api.domain.user.User;
 import poke.center.api.domain.user.UserRepository;
 
@@ -33,7 +34,6 @@ public class RegisterController {
         if (user != null) {
             return ResponseEntity.unprocessableEntity().body("Username not available");
         }
-
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         var newUser = new User(data);
