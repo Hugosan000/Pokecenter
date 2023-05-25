@@ -2,13 +2,11 @@ package poke.center.api.domain.user;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import poke.center.api.controller.TrainerRegisterData;
 import poke.center.api.domain.role.Role;
 
 import java.util.Collection;
@@ -19,6 +17,7 @@ import java.util.Set;
 @Table(name = "user")
 @Entity(name = "User")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -37,6 +36,12 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "roleId")
     )
     private Set<Role> roles = new HashSet<>();
+
+    public User(TrainerRegisterData data) {
+        this.name = data.name();
+        this.login = data.login();
+        this.password = data.password();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
