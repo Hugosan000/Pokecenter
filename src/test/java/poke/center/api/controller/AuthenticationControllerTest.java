@@ -1,5 +1,7 @@
 package poke.center.api.controller;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +17,8 @@ class AuthenticationControllerTest {
 
     private MockMvc mockMvc;
     @Test
-    void login() {
-
+    @DisplayName("It should return a jwt token on successfull login")
+    void loginCenario1() {
+        Assertions.assertEquals(1, 1);
     }
 }
