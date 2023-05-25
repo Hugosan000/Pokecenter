@@ -11,7 +11,7 @@ import poke.center.api.domain.user.User;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
+import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -24,6 +24,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("pokecenter")
                     .withSubject(user.getLogin())
+                    .withClaim("roles", user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
                     .withExpiresAt(this.expirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
