@@ -18,15 +18,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("register")
-public class RegisterController {
+@RequestMapping("trainer")
+public class TrainerController {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private RoleRepository roleRepository;
-    @PostMapping("/trainer")
+    @PostMapping("/register")
     public ResponseEntity trainerRegister(@RequestBody @Valid TrainerRegisterData data) {
 
         var user = userRepository.findByLogin(data.login());

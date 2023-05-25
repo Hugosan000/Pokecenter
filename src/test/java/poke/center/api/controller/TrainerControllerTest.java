@@ -1,5 +1,6 @@
 package poke.center.api.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import poke.center.api.domain.trainer.TrainerRegisterData;
 import poke.center.api.domain.user.UserRepository;
@@ -25,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureJsonTesters
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 
-class RegisterControllerTest {
+class TrainerControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,14 +39,19 @@ class RegisterControllerTest {
     @Autowired
     private UserRepository userRepository;
 
+    @BeforeEach
+    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "userRole");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "user");
+    }
 
     @Test
-    @DisplayName("It should code 403 for successfully register")
     @WithMockUser
+    @DisplayName("It should return code 204 for successfully register")
     void trainerRegisterScenario1() throws Exception {
 
         var response = mockMvc.perform(
-                post("/register/trainer")
+                post("/trainer/register")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(trainerRegisterDataJson.write(
                             new TrainerRegisterData("teste", "teste", "12345678")
