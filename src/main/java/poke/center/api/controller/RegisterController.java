@@ -18,7 +18,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("register")
-public class Register {
+public class RegisterController {
 
     @Autowired
     private UserRepository userRepository;
