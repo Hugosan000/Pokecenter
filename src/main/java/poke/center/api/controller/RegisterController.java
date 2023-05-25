@@ -39,7 +39,7 @@ public class RegisterController {
         var newUser = new User(data);
         newUser.setPassword(encoder.encode(data.password()));
 
-        var role = roleRepository.findByRoleName("trainer");
+        var role = roleRepository.findByName("trainer");
         if (role == null) {
             return ResponseEntity.badRequest().body("Error to complete register");
         }
