@@ -41,7 +41,7 @@ public class RegisterController {
 
         var role = roleRepository.findByName("trainer");
         if (role == null) {
-            return ResponseEntity.badRequest().body("Error to complete register");
+            return ResponseEntity.badRequest().body("Invalid role");
         }
 
         Set<Role> userRole = new HashSet<>();
