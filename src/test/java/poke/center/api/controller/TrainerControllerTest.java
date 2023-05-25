@@ -16,7 +16,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import poke.center.api.domain.trainer.TrainerRegisterData;
+import poke.center.api.domain.user.UserRegisterData;
 import poke.center.api.domain.user.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +34,7 @@ class TrainerControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private JacksonTester<TrainerRegisterData> trainerRegisterDataJson;
+    private JacksonTester<UserRegisterData> trainerRegisterDataJson;
 
     @Autowired
     private UserRepository userRepository;
@@ -54,7 +54,7 @@ class TrainerControllerTest {
                 post("/trainer/register")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(trainerRegisterDataJson.write(
-                            new TrainerRegisterData("teste", "teste", "12345678")
+                            new UserRegisterData("teste", "teste", "12345678")
                     ).getJson())
         ).andReturn().getResponse();
 

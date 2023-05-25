@@ -1,9 +1,9 @@
-package poke.center.api.domain.trainer;
+package poke.center.api.domain.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record TrainerRegisterData(
+public record UserRegisterData(
         @NotBlank
         @Size(min = 4)
         @Size(max = 100)

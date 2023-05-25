@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import poke.center.api.domain.role.Role;
-import poke.center.api.domain.trainer.TrainerRegisterData;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,7 +35,7 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(TrainerRegisterData data) {
+    public User(UserRegisterData data) {
         this.name = data.name();
         this.login = data.login();
         this.password = data.password();

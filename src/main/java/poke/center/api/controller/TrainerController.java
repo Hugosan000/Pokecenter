@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import poke.center.api.domain.role.Role;
 import poke.center.api.domain.role.RoleRepository;
-import poke.center.api.domain.trainer.TrainerRegisterData;
+import poke.center.api.domain.user.UserRegisterData;
 import poke.center.api.domain.user.User;
 import poke.center.api.domain.user.UserRepository;
 
@@ -27,7 +27,7 @@ public class TrainerController {
     @Autowired
     private RoleRepository roleRepository;
     @PostMapping("/register")
-    public ResponseEntity trainerRegister(@RequestBody @Valid TrainerRegisterData data) {
+    public ResponseEntity trainerRegister(@RequestBody @Valid UserRegisterData data) {
 
         var user = userRepository.findByLogin(data.login());
 
