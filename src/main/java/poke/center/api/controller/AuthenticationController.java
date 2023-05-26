@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import poke.center.api.domain.user.AuthenticationData;
+import poke.center.api.domain.user.UserAuthenticationData;
 import poke.center.api.domain.user.User;
 import poke.center.api.infra.secutiry.JwtTokenData;
 import poke.center.api.infra.secutiry.TokenService;
@@ -23,7 +23,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("login")
-    public ResponseEntity trainerLogin(@RequestBody @Valid AuthenticationData data) {
+    public ResponseEntity trainerLogin(@RequestBody @Valid UserAuthenticationData data) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var authentication = manager.authenticate(authenticationToken);
 

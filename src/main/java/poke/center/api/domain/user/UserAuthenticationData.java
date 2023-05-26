@@ -2,7 +2,7 @@ package poke.center.api.domain.user;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record AuthenticationData(
+public record UserAuthenticationData(
         @NotBlank
         String login,
         @NotBlank
