@@ -39,7 +39,7 @@ class AuthenticationControllerTest {
 
     @Test
     @DisplayName("It should return a jwt token on successfully login")
-    void loginCenario1() throws Exception {
+    void loginScenario1() throws Exception {
         var user = createUser();
         userRepository.save(user);
 
