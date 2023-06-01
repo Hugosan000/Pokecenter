@@ -71,7 +71,7 @@ class AuthenticationControllerTest {
         when(auth.isAuthenticated()).thenReturn(true);
         when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenReturn(auth);
         when(auth.getPrincipal()).thenReturn(user);
-        when(tokenService.createToken((User) auth.getPrincipal())).thenReturn("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwb2tlY2VudGVyIiwic3ViIjoibHVraW5oYSIsInJvbGVzIjpbInRyYWluZXIiXSwiZXhwIjoxNjg1NjU0MzI3fQ.aTFr0YE06EwTph6YCxzOqP3Ebc8g6FB3lC6k1LTlv5s");
+        when(tokenService.createToken((User) auth.getPrincipal())).thenReturn("teste-jwt");
 
         var response = mockMvc.perform(
                 post("/login")
