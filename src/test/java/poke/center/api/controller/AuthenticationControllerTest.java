@@ -3,19 +3,13 @@ package poke.center.api.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.jdbc.JdbcTestUtils;
@@ -31,8 +25,9 @@ import poke.center.api.infra.secutiry.TokenService;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ActiveProfiles("test")
@@ -55,7 +50,7 @@ class AuthenticationControllerTest {
     private RoleRepository roleRepository;
 
     @Autowired
-    private AuthenticationManager manager;
+    TokenService tokenService;
 
     @BeforeEach
     void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
@@ -64,32 +59,21 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    @DisplayName("It should return a jwt token on successfully login")
-    void loginScenario1() throws Exception {
+    @DisplayName("Should")
+    void tokenScenario1() throws Exception {
         var user = createUser();
         Set<Role> userRole = new HashSet<>();
         userRole.add(roleRepository.findByName("trainer"));
         user.setRoles(userRole);
         userRepository.save(user);
 
-        AuthenticationManager authenticationManager = Mockito.mock(AuthenticationManager.class);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
-        Mockito.when(authenticationManager.authenticate(Mockito.any(Authentication.class)))
-                .thenReturn(authentication);
-
-        TokenService tokenService = Mockito.mock(TokenService.class);
-        Mockito.when(tokenService.createToken(Mockito.any(User.class)))
-                .thenReturn("sample-jwt-token");
-
+        var token = tokenService.createToken(user);
+        assertNotNull(token);
         var response = mockMvc.perform(
-                post("/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(userAuthenticationDataJson.write(
-                                new UserAuthenticationData(user.getLogin(), user.getPassword())
-                        ).getJson())
-        ).andReturn().getResponse();
+                get("/trainer/test")
+                        .header("Authorization", token)
+        ).andExpect(status().isOk());
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
     private User createUser() {
