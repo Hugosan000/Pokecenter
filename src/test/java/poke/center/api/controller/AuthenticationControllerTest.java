@@ -3,6 +3,7 @@ package poke.center.api.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
@@ -18,7 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import poke.center.api.domain.user.User;
 import poke.center.api.domain.user.UserAuthenticationData;
@@ -45,33 +45,36 @@ class AuthenticationControllerTest {
     @Autowired
     private JacksonTester<UserAuthenticationData> userAuthenticationDataJson;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @MockBean
     private AuthenticationManager manager;
 
     @MockBean
     private TokenService tokenService;
 
+    @Mock
+    private UserRepository userRepository;
+
+    private User user;
+    private String jwtToken;
+
+
     @BeforeEach
     void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "userRole");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "user");
-    }
-    @Test
-    @DisplayName("It should return a jwt token on successfull login")
-    void loginCenario1() throws Exception {
-
-        var user = createUser();
-        userRepository.save(user);
-
+        jwtToken = "\"jwtToken\"";
+        user = createUser();
         Authentication auth = mock(Authentication.class);
+        when(userRepository.save(user)).thenReturn(user);
         auth.setAuthenticated(true);
         when(auth.isAuthenticated()).thenReturn(true);
         when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenReturn(auth);
         when(auth.getPrincipal()).thenReturn(user);
-        when(tokenService.createToken((User) auth.getPrincipal())).thenReturn("teste-jwt");
+        when(tokenService.createToken((User) auth.getPrincipal())).thenReturn("jwtToken");
+    }
+    @Test
+    @DisplayName("It should return a jwt token on successfull login")
+    void successfullyLoginShouldReturnJwt() throws Exception {
+
+        String expectedReponseBody = "{\"token\":"+ jwtToken +"}";
 
         var response = mockMvc.perform(
                 post("/login")
@@ -82,11 +85,14 @@ class AuthenticationControllerTest {
         ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo(expectedReponseBody);
     }
 
     private User createUser() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return new User(userData("test", "test", encoder.encode("potatopotato")));
+        User user = new User(userData("test", "test", encoder.encode("potatopotato")));
+        user.setId(1L);
+        return user;
     }
 
     private UserRegisterData userData(String name, String login, String password) {
