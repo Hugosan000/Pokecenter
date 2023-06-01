@@ -17,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import poke.center.api.domain.user.UserRegisterData;
-import poke.center.api.domain.user.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,8 +35,6 @@ class TrainerControllerTest {
     @Autowired
     private JacksonTester<UserRegisterData> trainerRegisterDataJson;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @BeforeEach
     void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
