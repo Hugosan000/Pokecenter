@@ -57,16 +57,15 @@ class AuthenticationControllerTest {
     private User user;
     private String jwtToken;
 
+    private Authentication auth;
+
 
     @BeforeEach
     void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
         jwtToken = "\"jwtToken\"";
         user = createUser();
-        Authentication auth = mock(Authentication.class);
+        auth = mock(Authentication.class);
         when(userRepository.save(user)).thenReturn(user);
-        auth.setAuthenticated(true);
-        when(auth.isAuthenticated()).thenReturn(true);
-        when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenReturn(auth);
         when(auth.getPrincipal()).thenReturn(user);
         when(tokenService.createToken((User) auth.getPrincipal())).thenReturn("jwtToken");
     }
@@ -74,6 +73,7 @@ class AuthenticationControllerTest {
     @DisplayName("It should return a jwt token on successfull login")
     void successfullyLoginShouldReturnJwt() throws Exception {
 
+        when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenReturn(auth);
         String expectedReponseBody = "{\"token\":"+ jwtToken +"}";
 
         var response = mockMvc.perform(
