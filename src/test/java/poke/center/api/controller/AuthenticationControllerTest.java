@@ -45,13 +45,12 @@ class AuthenticationControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private JacksonTester<UserAuthenticationData> userAuthenticationDataJson;
-
     @MockBean
     private AuthenticationManager manager;
-
     @MockBean
+    private TokenService mockedTokenService;
+    @InjectMocks
     private TokenService tokenService;
-
     @Mock
     private UserRepository userRepository;
 
@@ -110,7 +109,7 @@ class AuthenticationControllerTest {
         auth = mock(Authentication.class);
         when(userRepository.save(user)).thenReturn(user);
         when(auth.getPrincipal()).thenReturn(user);
-        when(tokenService.createToken((User) auth.getPrincipal())).thenReturn("jwtToken");
+        when(mockedTokenService.createToken((User) auth.getPrincipal())).thenReturn("jwtToken");
     }
 
     private UserRegisterData userData(String name, String login, String password) {
