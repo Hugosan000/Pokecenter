@@ -57,23 +57,14 @@ class AuthenticationControllerTest {
 
     private User user;
     private String jwtToken;
-
     private Authentication auth;
 
 
-    @BeforeEach
-    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
-        jwtToken = "\"jwtToken\"";
-        user = createUser();
-        auth = mock(Authentication.class);
-        when(userRepository.save(user)).thenReturn(user);
-        when(auth.getPrincipal()).thenReturn(user);
-        when(tokenService.createToken((User) auth.getPrincipal())).thenReturn("jwtToken");
-    }
+
     @Test
     @DisplayName("It should return a jwt token on successfull login")
     void successfullyLoginShouldReturnJwt() throws Exception {
-
+        setUpLoginTest();
         when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenReturn(auth);
         String expectedReponseBody = "{\"token\":"+ jwtToken +"}";
 
@@ -92,7 +83,7 @@ class AuthenticationControllerTest {
     @Test
     @DisplayName("It should return http code forbidden 403 for failed login")
     void failedLoginShouldReturnForbidden() throws Exception {
-
+        setUpLoginTest();
         when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenThrow(BadCredentialsException.class);
 
         var response = mockMvc.perform(
@@ -111,6 +102,15 @@ class AuthenticationControllerTest {
         User user = new User(userData("test", "test", encoder.encode("potatopotato")));
         user.setId(1L);
         return user;
+    }
+
+    private void setUpLoginTest() {
+        jwtToken = "\"jwtToken\"";
+        user = createUser();
+        auth = mock(Authentication.class);
+        when(userRepository.save(user)).thenReturn(user);
+        when(auth.getPrincipal()).thenReturn(user);
+        when(tokenService.createToken((User) auth.getPrincipal())).thenReturn("jwtToken");
     }
 
     private UserRegisterData userData(String name, String login, String password) {
