@@ -1,8 +1,8 @@
 package poke.center.api.controller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -13,13 +13,13 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import poke.center.api.domain.user.User;
 import poke.center.api.domain.user.UserAuthenticationData;
@@ -94,6 +94,17 @@ class AuthenticationControllerTest {
         ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    @DisplayName("It should return token and get subject from it")
+    void getSubjectFromToken() throws Exception {
+        User tokenUser = createUser();
+        ReflectionTestUtils.setField(tokenService, "secret", "its_a_secret");
+        String token = tokenService.createToken(tokenUser);
+        assertThat(token).isNotNull();
+        String subject = tokenService.getSubject(token);
+        assertThat(subject).isEqualTo(tokenUser.getLogin());
     }
 
     private User createUser() {
