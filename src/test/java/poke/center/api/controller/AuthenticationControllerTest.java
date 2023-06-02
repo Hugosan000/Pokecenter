@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -86,6 +87,23 @@ class AuthenticationControllerTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo(expectedReponseBody);
+    }
+
+    @Test
+    @DisplayName("It should return http code forbidden 403 for failed login")
+    void failedLoginShouldReturnForbidden() throws Exception {
+
+        when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenThrow(BadCredentialsException.class);
+
+        var response = mockMvc.perform(
+                post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userAuthenticationDataJson.write(
+                                new UserAuthenticationData(user.getLogin(), user.getPassword())
+                        ).getJson())
+        ).andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
     private User createUser() {
