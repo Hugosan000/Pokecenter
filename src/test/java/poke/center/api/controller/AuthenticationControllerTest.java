@@ -66,7 +66,7 @@ class AuthenticationControllerTest {
     void successfullyLoginShouldReturnJwt() throws Exception {
         setUpLoginTest();
         when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenReturn(auth);
-        String expectedReponseBody = "{\"token\":"+ jwtToken +"}";
+        String expectedResponseBody = "{\"token\":"+ jwtToken +"}";
 
         var response = mockMvc.perform(
                 post("/login")
@@ -77,7 +77,7 @@ class AuthenticationControllerTest {
         ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo(expectedReponseBody);
+        assertThat(response.getContentAsString()).isEqualTo(expectedResponseBody);
     }
 
     @Test
