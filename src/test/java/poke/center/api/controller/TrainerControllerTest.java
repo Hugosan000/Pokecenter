@@ -1,6 +1,6 @@
 package poke.center.api.controller;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +36,8 @@ class TrainerControllerTest {
     private JacksonTester<UserRegisterData> trainerRegisterDataJson;
 
 
-    @BeforeEach
-    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
+    @BeforeAll
+    static void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "userRole");
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "user");
     }
@@ -56,5 +56,20 @@ class TrainerControllerTest {
         ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("It should throw exception because username already exists")
+    void scenario2() throws Exception {
+
+        var response = mockMvc.perform(
+                post("/trainer/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(trainerRegisterDataJson.write(
+                                new UserRegisterData("teste", "teste", "12345678")
+                        ).getJson())
+        ).andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
 }
