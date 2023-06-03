@@ -61,7 +61,7 @@ class AuthenticationControllerTest {
 
 
     @Test
-    @DisplayName("It should return a jwt token on successfull login")
+    @DisplayName("It should return a jwt token on successfully login")
     void successfullyLoginShouldReturnJwt() throws Exception {
         setUpLoginTest();
         when(manager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()))).thenReturn(auth);
@@ -97,7 +97,7 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    @DisplayName("It should return token and get subject from it")
+    @DisplayName("It should generate valid token and get subject from it")
     void getSubjectFromToken() throws Exception {
         User tokenUser = createUser();
         ReflectionTestUtils.setField(tokenService, "secret", "its_a_secret");
