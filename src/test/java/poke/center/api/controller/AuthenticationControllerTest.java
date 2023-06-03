@@ -107,13 +107,6 @@ class AuthenticationControllerTest {
         assertThat(subject).isEqualTo(tokenUser.getLogin());
     }
 
-    private User createUser() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        User user = new User(userData("test", "test", encoder.encode("potatopotato")));
-        user.setId(1L);
-        return user;
-    }
-
     private void setUpLoginTest() {
         jwtToken = "\"jwtToken\"";
         user = createUser();
@@ -121,6 +114,13 @@ class AuthenticationControllerTest {
         when(userRepository.save(user)).thenReturn(user);
         when(auth.getPrincipal()).thenReturn(user);
         when(mockedTokenService.createToken((User) auth.getPrincipal())).thenReturn("jwtToken");
+    }
+
+    private User createUser() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = new User(userData("test", "test", encoder.encode("potatopotato")));
+        user.setId(1L);
+        return user;
     }
 
     private UserRegisterData userData(String name, String login, String password) {
