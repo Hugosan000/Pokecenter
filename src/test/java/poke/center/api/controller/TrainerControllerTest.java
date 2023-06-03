@@ -59,7 +59,7 @@ class TrainerControllerTest {
     }
 
     @Test
-    @DisplayName("It should throw exception because username already exists")
+    @DisplayName("It should return 422 code because username already exists")
     void scenario2() throws Exception {
 
         var response = mockMvc.perform(
