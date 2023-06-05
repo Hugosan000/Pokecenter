@@ -43,7 +43,6 @@ class TrainerControllerTest {
     }
 
     @Test
-    @WithMockUser
     @DisplayName("It should return code 204 for successfully register")
     void trainerRegisterScenario1() throws Exception {
 
