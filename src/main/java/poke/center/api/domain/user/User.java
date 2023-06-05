@@ -41,6 +41,11 @@ public class User implements UserDetails {
         this.password = data.password();
     }
 
+
+    public void registerAsNurse() {
+
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
