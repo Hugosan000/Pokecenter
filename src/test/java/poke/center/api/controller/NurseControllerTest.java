@@ -56,7 +56,7 @@ class NurseControllerTest {
 
     @Test
     @DisplayName("It should return 422 code because username already exists")
-    void scenario2() throws Exception {
+    void nurseRegisterScenario2() throws Exception {
 
         var response = mockMvc.perform(
                 post("/trainer/register")
