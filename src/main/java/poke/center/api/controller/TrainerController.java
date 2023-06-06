@@ -49,9 +49,4 @@ public class TrainerController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/test")
-    public ResponseEntity test() {
-        return ResponseEntity.ok("dale");
-    }
-
 }
