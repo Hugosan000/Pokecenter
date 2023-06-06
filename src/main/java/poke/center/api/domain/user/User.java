@@ -56,7 +56,7 @@ public class User implements UserDetails {
 
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         this.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getName().toUpperCase()));
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
         return authorities;
     }
