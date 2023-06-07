@@ -32,6 +32,7 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/trainer/register").permitAll()
                                 .requestMatchers("trainer/**").hasAuthority("trainer")
+                                .requestMatchers(HttpMethod.POST, "/nurse/**").hasAuthority("nurse")
                                 .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

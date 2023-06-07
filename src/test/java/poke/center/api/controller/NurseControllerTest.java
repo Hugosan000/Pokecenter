@@ -12,6 +12,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,15 +26,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 @AutoConfigureJsonTesters
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-
-class TrainerControllerTest {
+class NurseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
-    private JacksonTester<UserRegisterData> trainerRegisterDataJson;
-
+    private JacksonTester<UserRegisterData> nurseRegisterDataJson;
 
     @BeforeAll
     static void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
@@ -41,33 +39,53 @@ class TrainerControllerTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "user");
     }
 
+
     @Test
+    @WithMockUser(authorities = {"nurse"})
     @DisplayName("It should return code 204 for successfully register")
-    void trainerRegisterScenario1() throws Exception {
+    void nurseRegisterScenario1() throws Exception {
 
         var response = mockMvc.perform(
-                post("/trainer/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(trainerRegisterDataJson.write(
-                            new UserRegisterData("teste", "teste", "12345678")
-                    ).getJson())
+                post("/nurse/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(nurseRegisterDataJson.write(
+                                new UserRegisterData("teste", "teste", "12345678")
+                        ).getJson())
         ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
-    @DisplayName("It should return 422 code because username already exists")
-    void scenario2() throws Exception {
+    @WithMockUser(authorities = {"nurse"})
+    @DisplayName("It should return 400 code because username already exists")
+    void nurseRegisterScenario2() throws Exception {
 
         var response = mockMvc.perform(
-                post("/trainer/register")
+                post("/nurse/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(trainerRegisterDataJson.write(
+                        .content(nurseRegisterDataJson.write(
                                 new UserRegisterData("teste", "teste", "12345678")
                         ).getJson())
         ).andReturn().getResponse();
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
+
+    @Test
+    @WithMockUser(authorities = {"trainer"})
+    @DisplayName("It should return 403 because user has not nurse authority")
+    void nurseRegisterScenario3() throws Exception {
+
+        var response = mockMvc.perform(
+                post("/nurse/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(nurseRegisterDataJson.write(
+                                new UserRegisterData("teste", "teste", "12345678")
+                        ).getJson())
+        ).andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
+    }
+
 }
