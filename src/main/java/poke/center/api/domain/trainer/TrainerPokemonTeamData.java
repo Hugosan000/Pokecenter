@@ -13,8 +13,7 @@ public record TrainerPokemonTeamData(
         @Min(value = 1L)
         Long trainerId,
 
-
-        @Size(min = 6, max = 6, message = "The information os pokemons must contain 6 of them")
+        @Size(min = 6, max = 6, message = "Pokemon array must contain the min/max of 6")
         @NotNull
         @UniqueElements
         List<@Pattern(regexp = "^[0-9]*$", message = "Only Integer values are acceptable") String> pokemons
