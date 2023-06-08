@@ -3,6 +3,7 @@ package poke.center.api.infra.exception;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,11 +19,16 @@ public class ExceptionTreatment {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity error400(MethodArgumentNotValidException ex) {
-        var erros = ex.getFieldErrors();
-        return ResponseEntity.badRequest().body(erros.stream().map(ValidationErrorData::new).toList());
+        var errors = ex.getFieldErrors();
+        return ResponseEntity.badRequest().body(errors.stream().map(ValidationErrorData::new).toList());
     }
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity validationError(ValidationException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity invalidJson(HttpMessageNotReadableException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 

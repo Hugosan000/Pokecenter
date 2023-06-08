@@ -1,19 +1,22 @@
 package poke.center.api.domain.trainer;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import poke.center.api.domain.pokemon.Pokemon;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 
 public record TrainerPokemonTeam(
-        @NotBlank
+        @NotNull
         @Min(value = 1L)
         Long trainerId,
 
+
         @Size(min = 6, max = 6, message = "The information os pokemons must contain 6 of them")
-        @NotBlank
-        List<Pokemon> pokemons
+        @NotNull
+        @UniqueElements
+        List<@Pattern(regexp = "^[0-9]*$", message = "Only Integer values are acceptable") String> pokemons
 ) {
 }
