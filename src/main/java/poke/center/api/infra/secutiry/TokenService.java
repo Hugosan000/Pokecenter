@@ -24,6 +24,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("pokecenter")
                     .withSubject(user.getLogin())
+                    .withClaim("subjectId", user.getId())
                     .withClaim("roles", user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
                     .withExpiresAt(this.expirationDate())
                     .sign(algorithm);
@@ -41,6 +42,21 @@ public class TokenService {
                     .build()
                     .verify(jwtToken)
                     .getSubject();
+        } catch (JWTVerificationException exception) {
+            throw new RuntimeException("Error to validate token", exception);
+        }
+    }
+
+    public String getSubjectId(String jwtToken) {
+
+        try {
+            var algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("pokecenter")
+                    .build()
+                    .verify(jwtToken)
+                    .getClaim("subjectId")
+                    .toString();
         } catch (JWTVerificationException exception) {
             throw new RuntimeException("Error to validate token", exception);
         }
