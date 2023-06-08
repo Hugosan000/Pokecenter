@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import poke.center.api.domain.role.Role;
 import poke.center.api.domain.role.RoleRepository;
-import poke.center.api.domain.trainer.TrainerPokemonTeam;
+import poke.center.api.domain.trainer.TrainerPokemonTeamData;
 import poke.center.api.domain.user.UserRegisterData;
 import poke.center.api.domain.user.User;
 import poke.center.api.domain.user.UserRepository;
@@ -54,7 +54,7 @@ public class TrainerController {
 
     @PostMapping("/assemble-pokemon-team")
     @Transactional
-    public ResponseEntity assemblePokemonTeam(@RequestBody @Valid TrainerPokemonTeam data){
+    public ResponseEntity assemblePokemonTeam(@RequestBody @Valid TrainerPokemonTeamData data){
 
         var pokemonsId = data.pokemons();
 

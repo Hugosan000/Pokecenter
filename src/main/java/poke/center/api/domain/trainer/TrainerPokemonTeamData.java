@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 
-public record TrainerPokemonTeam(
+public record TrainerPokemonTeamData(
         @NotNull
         @Min(value = 1L)
         Long trainerId,
