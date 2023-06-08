@@ -25,15 +25,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 @AutoConfigureJsonTesters
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-
-class TrainerControllerTest {
+class NurseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
-    private JacksonTester<UserRegisterData> trainerRegisterDataJson;
-
+    private JacksonTester<UserRegisterData> nurseRegisterDataJson;
 
     @BeforeAll
     static void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
@@ -41,16 +38,17 @@ class TrainerControllerTest {
         JdbcTestUtils.deleteFromTables(jdbcTemplate, "user");
     }
 
+
     @Test
     @DisplayName("It should return code 204 for successfully register")
-    void trainerRegisterScenario1() throws Exception {
+    void nurseRegisterScenario1() throws Exception {
 
         var response = mockMvc.perform(
-                post("/trainer/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(trainerRegisterDataJson.write(
-                            new UserRegisterData("teste", "teste", "12345678")
-                    ).getJson())
+                post("/nurse/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(nurseRegisterDataJson.write(
+                                new UserRegisterData("teste", "teste", "12345678")
+                        ).getJson())
         ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -58,16 +56,17 @@ class TrainerControllerTest {
 
     @Test
     @DisplayName("It should return 422 code because username already exists")
-    void scenario2() throws Exception {
+    void nurseRegisterScenario2() throws Exception {
 
         var response = mockMvc.perform(
                 post("/trainer/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(trainerRegisterDataJson.write(
+                        .content(nurseRegisterDataJson.write(
                                 new UserRegisterData("teste", "teste", "12345678")
                         ).getJson())
         ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
+
 }
