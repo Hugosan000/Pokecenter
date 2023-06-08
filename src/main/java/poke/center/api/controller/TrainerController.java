@@ -7,25 +7,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import poke.center.api.domain.pokemon.Pokemon;
+import poke.center.api.domain.pokemon.PokemonRepository;
 import poke.center.api.domain.role.Role;
 import poke.center.api.domain.role.RoleRepository;
 import poke.center.api.domain.trainer.TrainerPokemonTeamData;
-import poke.center.api.domain.user.UserRegisterData;
 import poke.center.api.domain.user.User;
+import poke.center.api.domain.user.UserRegisterData;
 import poke.center.api.domain.user.UserRepository;
+import poke.center.api.infra.secutiry.TokenService;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("trainer")
 public class TrainerController {
 
     @Autowired
+    private TokenService tokenService;
+    @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private PokemonRepository pokemonRepository;
     @PostMapping("/register")
     @Transactional
     public ResponseEntity trainerRegister(@RequestBody @Valid UserRegisterData data) {
@@ -54,11 +61,22 @@ public class TrainerController {
 
     @PostMapping("/assemble-pokemon-team")
     @Transactional
-    public ResponseEntity assemblePokemonTeam(@RequestBody @Valid TrainerPokemonTeamData data){
-
+    public ResponseEntity assemblePokemonTeam(@RequestBody @Valid TrainerPokemonTeamData data, @RequestHeader (name = "Authorization") String token){
+        token = token.replace("Bearer ", "");
+        var subjectId = tokenService.getSubjectId(token);
         var pokemonsId = data.pokemons();
 
-        return ResponseEntity.ok(pokemonsId);
+        var trainer = userRepository.findById(Long.valueOf(subjectId)).orElse(null);
+
+        Stream<Pokemon> pokemons = pokemonsId.stream().map(p -> {
+            return pokemonRepository.findById(Long.valueOf(p)).orElse(null);
+        });
+
+        if (pokemons.anyMatch(p -> p == null)) {
+            return ResponseEntity.badRequest().body("Invalid pokemon id");
+        }
+
+        return ResponseEntity.ok(pokemons);
 
     }
 
