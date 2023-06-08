@@ -56,6 +56,10 @@ public class TrainerController {
     @Transactional
     public ResponseEntity assemblePokemonTeam(@RequestBody @Valid TrainerPokemonTeam data){
 
+        var pokemonsId = data.pokemons();
+
+        return ResponseEntity.ok(pokemonsId);
+
     }
 
 }
