@@ -29,6 +29,7 @@ public class TrainerController {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private RoleRepository roleRepository;
     @Autowired

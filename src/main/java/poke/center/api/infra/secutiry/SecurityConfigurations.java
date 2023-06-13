@@ -33,6 +33,7 @@ public class SecurityConfigurations {
                                 .requestMatchers(HttpMethod.POST, "/trainer/register").permitAll()
                                 .requestMatchers("trainer/**").hasAuthority("trainer")
                                 .requestMatchers(HttpMethod.POST, "/nurse/**").hasAuthority("nurse")
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
