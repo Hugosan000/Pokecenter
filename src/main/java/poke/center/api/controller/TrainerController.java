@@ -70,6 +70,10 @@ public class TrainerController {
 
         var trainer = userRepository.findById(Long.valueOf(subjectId)).orElse(null);
 
+        if (trainer.getPokemons().size() != 0) {
+            return ResponseEntity.badRequest().body("Trainer team already assembled");
+        }
+
         Stream<Pokemon> pokemonValidation = pokemonsId.stream().map(p -> pokemonRepository.findById(Long.valueOf(p)).orElse(null));
 
         if (pokemonValidation.anyMatch(p -> p == null)) {
