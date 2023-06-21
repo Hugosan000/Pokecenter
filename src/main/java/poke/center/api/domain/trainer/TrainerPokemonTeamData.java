@@ -9,9 +9,6 @@ import org.hibernate.validator.constraints.UniqueElements;
 import java.util.List;
 
 public record TrainerPokemonTeamData(
-        @NotNull
-        @Min(value = 1L)
-        Long trainerId,
 
         @Size(min = 6, max = 6, message = "Pokemon array must contain the min/max of 6")
         @NotNull
