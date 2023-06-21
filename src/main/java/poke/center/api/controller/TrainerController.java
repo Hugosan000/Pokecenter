@@ -77,7 +77,9 @@ public class TrainerController {
             return ResponseEntity.badRequest().body("Invalid pokemon id");
         }
 
-        return ResponseEntity.ok(pokemons);
+        trainer.setPokemons((Set<Pokemon>) pokemons);
+
+        return ResponseEntity.ok(trainer.getPokemons());
 
     }
 
