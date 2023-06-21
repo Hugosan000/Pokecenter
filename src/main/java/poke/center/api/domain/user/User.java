@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import poke.center.api.domain.pokemon.Pokemon;
 import poke.center.api.domain.role.Role;
 
 import java.util.Collection;
@@ -35,6 +36,14 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "roleId")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "pokemonUser",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "pokemonId")
+    )
+    private Set<Pokemon> pokemons = new HashSet<>();
 
     public User(UserRegisterData data) {
         this.name = data.name();
