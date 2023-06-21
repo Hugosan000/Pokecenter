@@ -19,6 +19,7 @@ import poke.center.api.infra.secutiry.TokenService;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -69,15 +70,15 @@ public class TrainerController {
 
         var trainer = userRepository.findById(Long.valueOf(subjectId)).orElse(null);
 
-        Stream<Pokemon> pokemons = pokemonsId.stream().map(p -> {
-            return pokemonRepository.findById(Long.valueOf(p)).orElse(null);
-        });
+        Stream<Pokemon> pokemonValidation = pokemonsId.stream().map(p -> pokemonRepository.findById(Long.valueOf(p)).orElse(null));
 
-        if (pokemons.anyMatch(p -> p == null)) {
+        if (pokemonValidation.anyMatch(p -> p == null)) {
             return ResponseEntity.badRequest().body("Invalid pokemon id");
         }
 
-        trainer.setPokemons((Set<Pokemon>) pokemons);
+        Stream<Pokemon> trainerPokemon = pokemonsId.stream().map(p -> pokemonRepository.findById(Long.valueOf(p)).orElse(null));
+
+        trainer.setPokemons(trainerPokemon.collect(Collectors.toSet()));
 
         return ResponseEntity.ok(trainer.getPokemons());
 
